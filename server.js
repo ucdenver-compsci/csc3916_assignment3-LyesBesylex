@@ -88,16 +88,33 @@ router.post('/signin', function (req, res) {
 
 router.route('/movies')
     .get((req, res) => {
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "GET movies";
-        res.json(o);        
+        
     })
     .post((req, res) => {
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie saved";
-        res.json(o);
+        if (!req.body.title || !req.body.actors || !req.body.genre|| !req.body.releaseDate) {
+            res.json({success: false, msg: 'Please include all information about movie (Title, actors, genre, releaseDate)'})
+        } 
+        else if (req.body.actors.length ){
+
+        }
+        else {
+            var movie = new Movie();
+            movie.title = req.body.title;
+            movie.actors = req.body.actors;
+            movie.genre = req.body.genre;
+            movie.releaseDate= req.body.releaseDate;
+    
+            movie.save(function(err){
+                if (err) {
+                    if (err.code == 11000)
+                        return res.json({ success: false, message: 'That movie already exists'});
+                    else
+                        return res.json(err);
+                }
+    
+                res.json({success: true, msg: 'Successfully created new movie.'})
+            });
+        }
     })
     .put(authJwtController.isAuthenticated, (req, res) => {
         // HTTP PUT Method
