@@ -94,7 +94,7 @@ router.route('/movies')
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         } else {
             // If no error, send the retrieved movies
-            res.json([{ success: true, movies: movies}]);
+            res.json(movies);
         }
     });
     })
