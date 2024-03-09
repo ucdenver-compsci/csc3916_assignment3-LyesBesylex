@@ -149,17 +149,17 @@ router.route('/movies/:MovieId')
             }
         });
         })
-        .post((req, res) => {
+    .post((req, res) => {
             res.status(405).send({ message: 'HTTP method not supported.' });
         })
-        .put(authJwtController.isAuthenticated, (req, res) => {
+    .put(authJwtController.isAuthenticated, (req, res) => {
             const MovieId = req.params.MovieId;
             var newvalues = { $set: req.body};
 
             Movie.UpdateOne({title: MovieId}, newvalues, function (err, movie) {
                 if (err) {
                     // Handle error if any
-                    res.status(500).json({ success: false, message: 'Internal Server Error' });
+                    res.status(500).send({ message: "Error in update Movies/:movieid" });
                 } else {
                     // send back the updated movie information
                     res.json({ success: true, movies: movie });
@@ -167,13 +167,13 @@ router.route('/movies/:MovieId')
             });
 
         })
-        .delete(authController.isAuthenticated, (req, res) => {
+    .delete(authController.isAuthenticated, (req, res) => {
             const MovieId = req.params.MovieId;
 
             Movie.DeleteOne({title: MovieId}, function (err, movie) {
                 if (err) {
                     // Handle error if any
-                    res.status(500).json({ success: false, message: 'Internal Server Error' });
+                    res.status(500).send({ message: "Error in delete Movies/:movieid" });
                 } else {
                     // If no error, send the retrieved movie
                     res.status(404).send({ message: "Successfully Deleted" });
