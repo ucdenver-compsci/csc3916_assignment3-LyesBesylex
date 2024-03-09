@@ -10,12 +10,29 @@ try {
 }
 const collectionName = 'movies'
 
+var actorSchema = new Schema({
+    "actorName": String,
+    "characterName": String,
+})
+
 // Movie schema
 var MovieSchema = new Schema({
-    "title": String,
-    "releaseDate": Number,
-    "genre": String,
-    "Actors": [{"actorName":String, "characterName":String}]
+    "title": {
+        type: String,
+        required: true
+    },
+    "releaseDate": {
+        type: Number,
+        required: true
+    },
+    "genre": {
+        type: String,
+        required: true
+    },
+    "actors": {
+        type: [actorSchema], 
+        required: true
+    }
 });
 
 
