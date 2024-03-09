@@ -103,7 +103,7 @@ router.route('/movies')
             res.json({success: false, msg: 'Please include all information about movie (Title, actors, genre, releaseDate)'})
         } 
         else if (!Array.isArray(req.body.actors) || req.body.actors.length < 3) {
-            res.json({ success: false, msg: 'Please provide at least three actor for the movie.' });
+            res.json({ success: false, msg: 'Please provide at least three actors for the movie.' });
         }
         else {
             var movie = new Movie();
