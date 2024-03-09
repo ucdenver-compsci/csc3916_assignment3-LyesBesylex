@@ -10,11 +10,6 @@ try {
 }
 const collectionName = 'movies'
 
-var actorSchema = new Schema({
-    "actorName": String,
-    "characterName": String,
-})
-
 // Movie schema
 var MovieSchema = new Schema({
     "title": {
@@ -30,9 +25,14 @@ var MovieSchema = new Schema({
         required: true
     },
     "actors": {
-        type: [actorSchema], 
+        type: [{
+            "actorName": String,
+            "characterName": String,
+        }], 
         required: true
     }
+
+    
 });
 
 
