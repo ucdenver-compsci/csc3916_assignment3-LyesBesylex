@@ -138,7 +138,7 @@ router.route('/movies')
 
 router.route('/movies/:MovieId')
     .get((req, res) => {
-
+        const MovieId = req.params.MovieId;
         Movie.findOne({title: MovieId}, function (err, movie) {
             if (err) {
                 // Handle error if any
@@ -150,30 +150,7 @@ router.route('/movies/:MovieId')
         });
         })
         .post((req, res) => {
-            if (!req.body.title || !req.body.actors || !req.body.genre|| !req.body.releaseDate) {
-                res.json({success: false, msg: 'Please include all information about movie (Title, actors, genre, releaseDate)'})
-            } 
-            else if (!Array.isArray(req.body.actors) || req.body.actors.length < 3) {
-                res.json({ success: false, msg: 'Please provide at least three actor for the movie.' });
-            }
-            else {
-                var movie = new Movie();
-                movie.title = req.body.title;
-                movie.actors = req.body.actors;
-                movie.genre = req.body.genre;
-                movie.releaseDate= req.body.releaseDate;
-        
-                movie.save(function(err){
-                    if (err) {
-                        if (err.code == 11000)
-                            return res.json({ success: false, message: 'That movie already exists'});
-                        else
-                            return res.json(err);
-                    }
-        
-                    res.json({success: true, msg: 'Successfully created new movie.'})
-                });
-            }
+            res.status(405).send({ message: 'HTTP method not supported.' });
         })
         .put(authJwtController.isAuthenticated, (req, res) => {
             res.status(405).send({ message: 'HTTP method not supported.' });
