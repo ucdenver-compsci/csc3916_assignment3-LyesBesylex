@@ -153,10 +153,33 @@ router.route('/movies/:MovieId')
             res.status(405).send({ message: 'HTTP method not supported.' });
         })
         .put(authJwtController.isAuthenticated, (req, res) => {
-            res.status(405).send({ message: 'HTTP method not supported.' });
+            const MovieId = req.params.MovieId;
+            var newvalues = { $set: req.body};
+
+            Movie.UpdateOne({title: MovieId}, newvalues, function (err, movie) {
+                if (err) {
+                    // Handle error if any
+                    res.status(500).json({ success: false, message: 'Internal Server Error' });
+                } else {
+                    // send back the updated movie information
+                    res.json({ success: true, movies: movie });
+                }
+            });
+
         })
         .delete(authController.isAuthenticated, (req, res) => {
-            res.status(405).send({ message: 'HTTP method not supported.' });
+            const MovieId = req.params.MovieId;
+
+            Movie.DeleteOne({title: MovieId}, function (err, movie) {
+                if (err) {
+                    // Handle error if any
+                    res.status(500).json({ success: false, message: 'Internal Server Error' });
+                } else {
+                    // If no error, send the retrieved movie
+                    res.status(404).send({ message: "Successfully Deleted" });
+                }
+            });
+
         })
         .all((req, res) => {
             // Any other HTTP Method
