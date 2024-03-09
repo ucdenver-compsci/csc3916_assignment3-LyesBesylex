@@ -148,10 +148,10 @@ router.route('/movies/:MovieId')
                 res.json({ success: true, movies: movie });
             }
         });
-        })
+        })//Working
     .post((req, res) => {
             res.status(405).send({ message: 'HTTP method not supported.' });
-        })
+        }) //Working
     .put(authJwtController.isAuthenticated, (req, res) => {
             const MovieId = req.params.MovieId;
             var newvalues = { $set: req.body};
@@ -166,7 +166,7 @@ router.route('/movies/:MovieId')
                 }
             });
 
-        })
+        })//Working
     .delete(authController.isAuthenticated, (req, res) => {
             const MovieId = req.params.MovieId;
 
@@ -180,7 +180,7 @@ router.route('/movies/:MovieId')
                 }
             });
 
-        })
+        }) //Working
         .all((req, res) => {
             // Any other HTTP Method
             // Returns a message stating that the HTTP method is unsupported.
