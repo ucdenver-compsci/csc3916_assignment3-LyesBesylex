@@ -87,15 +87,23 @@ router.post('/signin', function (req, res) {
 });
 
 router.route('/movies')
-    .get((req, res) => {
-        
+.get((req, res) => {
+    Movie.find({}, function (err, movies) {
+        if (err) {
+            // Handle error if any
+            res.status(500).json({ success: false, message: 'Internal Server Error' });
+        } else {
+            // If no error, send the retrieved movies
+            res.json({ success: true, movies: movies });
+        }
+    });
     })
     .post((req, res) => {
         if (!req.body.title || !req.body.actors || !req.body.genre|| !req.body.releaseDate) {
             res.json({success: false, msg: 'Please include all information about movie (Title, actors, genre, releaseDate)'})
         } 
-        else if (req.body.actors.length ){
-
+        else if (!Array.isArray(req.body.actors) || req.body.actors.length < 3) {
+            res.json({ success: false, msg: 'Please provide at least three actor for the movie.' });
         }
         else {
             var movie = new Movie();
@@ -117,22 +125,10 @@ router.route('/movies')
         }
     })
     .put(authJwtController.isAuthenticated, (req, res) => {
-        // HTTP PUT Method
-        // Requires JWT authentication.
-        // Returns a JSON object with status, message, headers, query, and env.
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie updated";
-        res.json(o);
+        res.status(405).send({ message: 'HTTP method not supported.' });
     })
     .delete(authController.isAuthenticated, (req, res) => {
-        // HTTP DELETE Method
-        // Requires Basic authentication.
-        // Returns a JSON object with status, message, headers, query, and env.
-        var o = getJSONObjectForMovieRequirement(req);
-        o.status = 200;
-        o.message = "movie deleted";
-        res.json(o);
+        res.status(405).send({ message: 'HTTP method not supported.' });
     })
     .all((req, res) => {
         // Any other HTTP Method

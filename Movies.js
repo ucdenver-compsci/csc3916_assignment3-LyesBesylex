@@ -8,11 +8,13 @@ try {
     console.log(error)
     console.log("could not connect");
 }
+const collectionName = 'movies'
 
 // Movie schema
 var MovieSchema = new Schema({
     "title": String,
-    "releaseDate": String,
+    "releaseDate": Number,
+    "genre": String,
     "Actors": [{"actorName":String, "characterName":String}]
 });
 
