@@ -156,7 +156,7 @@ router.route('/movies/:MovieId')
             const MovieId = req.params.MovieId;
             var newvalues = { $set: req.body};
 
-            Movie.UpdateOne({title: MovieId}, newvalues, function (err, movie) {
+            Movie.updateOne({title: MovieId}, newvalues, function (err, movie) {
                 if (err) {
                     // Handle error if any
                     res.status(500).send({ message: "Error in update Movies/:movieid" });
@@ -170,7 +170,7 @@ router.route('/movies/:MovieId')
     .delete(authController.isAuthenticated, (req, res) => {
             const MovieId = req.params.MovieId;
 
-            Movie.DeleteOne({title: MovieId}, function (err, movie) {
+            Movie.deleteOne({title: MovieId}, function (err, movie) {
                 if (err) {
                     // Handle error if any
                     res.status(500).send({ message: "Error in delete Movies/:movieid" });
