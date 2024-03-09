@@ -94,7 +94,7 @@ router.route('/movies')
             res.status(500).json({ success: false, message: 'Internal Server Error' });
         } else {
             // If no error, send the retrieved movies
-            res.json({ success: true, movies: movies });
+            res.json([{ success: true, movies: movies}]);
         }
     });
     })
@@ -135,6 +135,58 @@ router.route('/movies')
         // Returns a message stating that the HTTP method is unsupported.
         res.status(405).send({ message: 'HTTP method not supported.' });
     });
+
+router.route('/movies/:MovieId')
+    .get((req, res) => {
+
+        Movie.findOne({title: MovieId}, function (err, movie) {
+            if (err) {
+                // Handle error if any
+                res.status(500).json({ success: false, message: 'Internal Server Error' });
+            } else {
+                // If no error, send the retrieved movie
+                res.json({ success: true, movies: movie });
+            }
+        });
+        })
+        .post((req, res) => {
+            if (!req.body.title || !req.body.actors || !req.body.genre|| !req.body.releaseDate) {
+                res.json({success: false, msg: 'Please include all information about movie (Title, actors, genre, releaseDate)'})
+            } 
+            else if (!Array.isArray(req.body.actors) || req.body.actors.length < 3) {
+                res.json({ success: false, msg: 'Please provide at least three actor for the movie.' });
+            }
+            else {
+                var movie = new Movie();
+                movie.title = req.body.title;
+                movie.actors = req.body.actors;
+                movie.genre = req.body.genre;
+                movie.releaseDate= req.body.releaseDate;
+        
+                movie.save(function(err){
+                    if (err) {
+                        if (err.code == 11000)
+                            return res.json({ success: false, message: 'That movie already exists'});
+                        else
+                            return res.json(err);
+                    }
+        
+                    res.json({success: true, msg: 'Successfully created new movie.'})
+                });
+            }
+        })
+        .put(authJwtController.isAuthenticated, (req, res) => {
+            res.status(405).send({ message: 'HTTP method not supported.' });
+        })
+        .delete(authController.isAuthenticated, (req, res) => {
+            res.status(405).send({ message: 'HTTP method not supported.' });
+        })
+        .all((req, res) => {
+            // Any other HTTP Method
+            // Returns a message stating that the HTTP method is unsupported.
+            res.status(405).send({ message: 'HTTP method not supported.' });
+        });
+    
 
 
 app.use('/', router);
