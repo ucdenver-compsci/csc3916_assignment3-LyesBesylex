@@ -6,9 +6,10 @@ mongoose.Promise = global.Promise;
 
 //mongoose.connect(process.env.DB, { useNewUrlParser: true });
 try {
-    mongoose.connect( process.env.DB, {useNewUrlParser: true, useUnifiedTopology: true}, () =>
+    mongoose.connect(String(process.env.DB), {useNewUrlParser: true, useUnifiedTopology: true}, () =>
         console.log("connected"));
 }catch (error) {
+    console.log(error)
     console.log("could not connect");
 }
 mongoose.set('useCreateIndex', true);
